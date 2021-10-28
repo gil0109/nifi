@@ -75,7 +75,6 @@ RUN curl -fSL ${MIRROR_BASE_URL}/${NIFI_BINARY_PATH} -o ${NIFI_BASE_DIR}/nifi-${
     && mkdir -p ${NIFI_LOG_DIR} \
     && ln -s ${NIFI_HOME} ${NIFI_BASE_DIR}/nifi-${NIFI_VERSION}
 
-USER nifi
 
 VOLUME ${NIFI_LOG_DIR} \
        ${NIFI_HOME}/conf \
@@ -92,6 +91,7 @@ RUN echo "#!/bin/sh\n" > $NIFI_HOME/bin/nifi-env.sh
 EXPOSE 8080 8443 10000 8000
 
 WORKDIR ${NIFI_HOME}
+USER nifi
 
 # Apply configuration and start NiFi
 #
