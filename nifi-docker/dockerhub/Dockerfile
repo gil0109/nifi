@@ -48,6 +48,7 @@ ENV NIFI_LOG_DIR=${NIFI_HOME}/logs
 # Install package dependencies
 # Setup NiFi user and create necessary directories
 # Clear nifi-env.sh in favour of configuring all environment variables in the Dockerfile
+RUN yum install -y microdnf
 RUN microdnf update -y && microdnf install yum && \
     yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm && \
     yum update -y && microdnf clean all
