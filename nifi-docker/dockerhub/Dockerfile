@@ -58,6 +58,8 @@ RUN microdnf -y install git rsync nano net-tools vim wget nmap jq xmlstarlet pro
 
 COPY --chown=0:0 --from=nifibase $NIFI_BASE_DIR $NIFI_BASE_DIR
 
+RUN ls -l
+
 # copy status scripts for dependencies to be executed and add them to path
 COPY status.sh ${NIFI_HOME}/bin
 
