@@ -92,7 +92,8 @@ WORKDIR ${NIFI_HOME}
 RUN chgrp -R 0 ${NIFI_BASE_DIR} \
     && chmod -R g=u ${NIFI_BASE_DIR}
 
-RUN chmod -R 777 ${NIFI_BASE_DIR}
+RUN chgrp -v -R -L 0 /opt/nifi \
+    && chmod -v -R g=u /opt/nifi
 
 # Apply configuration and start NiFi
 #
