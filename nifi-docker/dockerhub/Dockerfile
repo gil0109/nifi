@@ -44,10 +44,11 @@ RUN chmod -R +x ${NIFI_BASE_DIR}/scripts/*.sh
 RUN groupadd -g ${GID} nifi || groupmod -n nifi `getent group ${GID} | cut -d: -f1` \
     && useradd --shell /bin/bash -u ${UID} -g ${GID} -m nifi \
     && mkdir -p ${NIFI_BASE_DIR} \
-    && chown -R nifi:nifi ${NIFI_BASE_DIR} \
+    && chown -R 0:0 ${NIFI_BASE_DIR} \
     && apt-get update \
     && apt-get install -y jq xmlstarlet procps
 
+RUN chmod -R g=u $NIFI_BASE_DIR
 USER nifi
 
 # Download, validate, and expand Apache NiFi Toolkit binary.
