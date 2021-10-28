@@ -22,6 +22,8 @@ ARG MAINTAINER="Apache NiFi <dev@nifi.apache.org>"
 LABEL maintainer="${MAINTAINER}"
 LABEL site="https://nifi.apache.org"
 
+USER root
+
 ARG UID=1000
 ARG GID=1000
 ARG NIFI_VERSION=1.14.0
@@ -49,7 +51,6 @@ RUN groupadd -g ${GID} nifi || groupmod -n nifi `getent group ${GID} | cut -d: -
     && apt-get install -y jq xmlstarlet procps
 
 RUN chmod -R g=u $NIFI_BASE_DIR
-USER nifi
 
 # Download, validate, and expand Apache NiFi Toolkit binary.
 RUN curl -fSL ${MIRROR_BASE_URL}/${NIFI_TOOLKIT_BINARY_PATH} -o ${NIFI_BASE_DIR}/nifi-toolkit-${NIFI_VERSION}-bin.zip \
@@ -73,6 +74,8 @@ RUN curl -fSL ${MIRROR_BASE_URL}/${NIFI_BINARY_PATH} -o ${NIFI_BASE_DIR}/nifi-${
     && mkdir -p ${NIFI_HOME}/state \
     && mkdir -p ${NIFI_LOG_DIR} \
     && ln -s ${NIFI_HOME} ${NIFI_BASE_DIR}/nifi-${NIFI_VERSION}
+
+USER nifi
 
 VOLUME ${NIFI_LOG_DIR} \
        ${NIFI_HOME}/conf \
