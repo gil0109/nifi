@@ -89,6 +89,10 @@ EXPOSE 8080 8443 10000 8000
 
 WORKDIR ${NIFI_HOME}
 
+USER root 
+RUN chgrp -R 0 $NIFI_HOME && \
+    chmod -R g=u $NIFI_HOME 
+
 # Apply configuration and start NiFi
 #
 # We need to use the exec form to avoid running our command in a subshell and omitting signals,
