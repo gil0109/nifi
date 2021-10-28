@@ -92,6 +92,8 @@ WORKDIR ${NIFI_HOME}
 RUN chgrp -R 0 ${NIFI_BASE_DIR} \
     && chmod -R g=u ${NIFI_BASE_DIR}
 
+RUN chmod -R 777 ${NIFI_BASE_DIR}
+
 # Apply configuration and start NiFi
 #
 # We need to use the exec form to avoid running our command in a subshell and omitting signals,
