@@ -48,13 +48,13 @@ RUN chmod -R +x ${NIFI_BASE_DIR}/scripts/*.sh
 #    && apt-get update \
 #    && apt-get install -y jq xmlstarlet procps
 
-RUN adduser nifi root \
-    && mkdir -p ${NIFI_HOME} \
-    && chown -R nifi:root ${NIFI_HOME} \
+RUN useradd --shell /bin/bash -u nifi -g root -m nifi \
+    && mkdir -p ${NIFI_BASE_DIR} \
+    && chown -R nifi:root ${NIFI_BASE_DIR} \
     && apt-get update \
     && apt-get install -y jq xmlstarlet procps
 
-RUN chmod -R 775 ${NIFI_HOME} 
+RUN chmod -R 775 ${NIFI_BASE_DIR} 
 
 USER 1000
 
