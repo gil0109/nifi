@@ -51,7 +51,7 @@ RUN groupadd -g ${GID} nifi || groupmod -n nifi `getent group ${GID} | cut -d: -
     && apt-get install -y jq xmlstarlet procps
 
 # RUN chmod -R g=u $NIFI_BASE_DIR
-RUN chmod -R 777 $NIFI_BASE_DIR
+RUN chmod -R 777 $NIFI_BASE_DIR/
 
 # Download, validate, and expand Apache NiFi Toolkit binary.
 RUN curl -fSL ${MIRROR_BASE_URL}/${NIFI_TOOLKIT_BINARY_PATH} -o ${NIFI_BASE_DIR}/nifi-toolkit-${NIFI_VERSION}-bin.zip \
@@ -92,7 +92,7 @@ RUN echo "#!/bin/sh\n" > $NIFI_HOME/bin/nifi-env.sh
 EXPOSE 8080 8443 10000 8000
 
 WORKDIR ${NIFI_HOME}
-USER nifi
+#USER nifi
 
 # Apply configuration and start NiFi
 #
