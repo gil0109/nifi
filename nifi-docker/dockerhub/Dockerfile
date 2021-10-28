@@ -48,9 +48,6 @@ RUN chmod -R +x ${NIFI_BASE_DIR}/scripts/*.sh
 #    && apt-get update \
 #    && apt-get install -y jq xmlstarlet procps
 
-#RUN chmod -R 775 ${NIFI_BASE_DIR} \ 
-#    && chown -R ${UID}:root ${NIFI_BASE_DIR} 
-
 RUN mkdir -p ${NIFI_BASE_DIR} \
     && chgrp -R 0 ${NIFI_BASE_DIR} \
     && chmod -R g=u ${NIFI_BASE_DIR} \
@@ -98,6 +95,8 @@ EXPOSE 8080 8443 10000 8000
 
 WORKDIR ${NIFI_HOME}
 
+RUN chgrp -R 0 ${NIFI_BASE_DIR} \
+    && chmod -R g=u ${NIFI_BASE_DIR}
 
 # Apply configuration and start NiFi
 #
