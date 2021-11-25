@@ -15,14 +15,16 @@
 # specific language governing permissions and limitations
 # under the License.
 #
-
-FROM openjdk:8-jre
-LABEL maintainer="Apache NiFi <dev@nifi.apache.org>"
+ARG IMAGE_NAME=openjdk
+ARG IMAGE_TAG=8-jre
+FROM ${IMAGE_NAME}:${IMAGE_TAG}
+ARG MAINTAINER="Apache NiFi <dev@nifi.apache.org>"
+LABEL maintainer="${MAINTAINER}"
 LABEL site="https://nifi.apache.org"
 
 ARG UID=1000
-ARG GID=1000
-ARG NIFI_VERSION=1.12.0
+ARG GID=0
+ARG NIFI_VERSION=1.14.0
 ARG BASE_URL=https://archive.apache.org/dist
 ARG MIRROR_BASE_URL=${MIRROR_BASE_URL:-${BASE_URL}}
 ARG NIFI_BINARY_PATH=${NIFI_BINARY_PATH:-/nifi/${NIFI_VERSION}/nifi-${NIFI_VERSION}-bin.zip}
@@ -39,10 +41,9 @@ ADD sh/ ${NIFI_BASE_DIR}/scripts/
 RUN chmod -R +x ${NIFI_BASE_DIR}/scripts/*.sh
 
 # Setup NiFi user and create necessary directories
-RUN groupadd -g ${GID} nifi || groupmod -n nifi `getent group ${GID} | cut -d: -f1` \
-    && useradd --shell /bin/bash -u ${UID} -g ${GID} -m nifi \
+RUN useradd --shell /bin/bash -u ${UID} -g ${GID} -m nifi \
     && mkdir -p ${NIFI_BASE_DIR} \
-    && chown -R nifi:nifi ${NIFI_BASE_DIR} \
+    && chown -R nifi:0 ${NIFI_BASE_DIR} \
     && apt-get update \
     && apt-get install -y jq xmlstarlet procps
 
@@ -80,7 +81,8 @@ VOLUME ${NIFI_LOG_DIR} \
        ${NIFI_HOME}/state
 
 # Clear nifi-env.sh in favour of configuring all environment variables in the Dockerfile
-RUN echo "#!/bin/sh\n" > $NIFI_HOME/bin/nifi-env.sh
+RUN echo "#!/bin/sh\n" > $NIFI_HOME/bin/nifi-env.sh \
+    && chmod -R g=u $NIFI_BASE_DIR
 
 # Web HTTP(s) & Socket Site-to-Site Ports
 EXPOSE 8080 8443 10000 8000
@@ -97,3 +99,4 @@ WORKDIR ${NIFI_HOME}
 # thus normal shell processing does not happen:
 # https://docs.docker.com/engine/reference/builder/#exec-form-entrypoint-example
 ENTRYPOINT ["../scripts/start.sh"]
+
