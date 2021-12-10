@@ -85,7 +85,7 @@ RUN echo "#!/bin/sh\n" > $NIFI_HOME/bin/nifi-env.sh \
     && chmod -vR g=u $NIFI_BASE_DIR
 
 USER root
-RUN chmod 777 ${NIFI_BASE_DIR}/nifi-${NIFI_VERSION}/conf
+RUN chmod -Rv 777 ${NIFI_BASE_DIR}/nifi-${NIFI_VERSION}/conf
 USER nifi
 
 # Web HTTP(s) & Socket Site-to-Site Ports
