@@ -72,6 +72,10 @@ RUN curl -fSL ${MIRROR_BASE_URL}/${NIFI_BINARY_PATH} -o ${NIFI_BASE_DIR}/nifi-${
     && mkdir -p ${NIFI_LOG_DIR} \
     && ln -s ${NIFI_HOME} ${NIFI_BASE_DIR}/nifi-${NIFI_VERSION}
 
+USER root
+RUN chmod -Rv 777 ${NIFI_BASE_DIR}/nifi-${NIFI_VERSION}/conf
+USER nifi
+
 VOLUME ${NIFI_LOG_DIR} \
        ${NIFI_HOME}/conf \
        ${NIFI_HOME}/database_repository \
@@ -82,11 +86,7 @@ VOLUME ${NIFI_LOG_DIR} \
 
 # Clear nifi-env.sh in favour of configuring all environment variables in the Dockerfile
 RUN echo "#!/bin/sh\n" > $NIFI_HOME/bin/nifi-env.sh \
-    && chmod -vR g=u $NIFI_BASE_DIR
-
-USER root
-RUN chmod -Rv 777 ${NIFI_BASE_DIR}/nifi-${NIFI_VERSION}/conf
-USER nifi
+    && chmod -R g=u $NIFI_BASE_DIR
 
 # Web HTTP(s) & Socket Site-to-Site Ports
 EXPOSE 8080 8443 10000 8000
