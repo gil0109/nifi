@@ -80,11 +80,13 @@ VOLUME ${NIFI_LOG_DIR} \
        ${NIFI_HOME}/provenance_repository \
        ${NIFI_HOME}/state
 
-# Clear nifi-env.sh in favour of configuring all environment variables in the Dockerfile
-RUN echo "#!/bin/sh\n" > $NIFI_HOME/bin/nifi-env.sh \
-    && chmod -R g=u $NIFI_BASE_DIR \
-    && chown -R 777 /opt/nifi/nifi-current/conf
 
+# Clear nifi-env.sh in favour of configuring all environment variables in the Dockerfile
+RUN echo "#!/bin/sh\n" > $NIFI_HOME/bin/nifi-env.sh 
+
+USER root
+RUN chmod -R g=u $NIFI_BASE_DIR 
+USER nifi
 # Web HTTP(s) & Socket Site-to-Site Ports
 EXPOSE 8080 8443 10000 8000
 
