@@ -82,8 +82,11 @@ VOLUME ${NIFI_LOG_DIR} \
 
 # Clear nifi-env.sh in favour of configuring all environment variables in the Dockerfile
 RUN echo "#!/bin/sh\n" > $NIFI_HOME/bin/nifi-env.sh \
-    && chmod -R g=u $NIFI_BASE_DIR \
-    && chmod -R g+rwx ${NIFI_HOME}/conf
+    && chmod -R g=u $NIFI_BASE_DIR
+
+USER root
+RUN chmod -R g+rwx ${NIFI_HOME}/conf
+USER nifi
 
 # Web HTTP(s) & Socket Site-to-Site Ports
 EXPOSE 8080 8443 10000 8000
